@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MixHits — One Page</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;}
+    body{
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      overflow:hidden;
+      background:#000;
+      color:#fff;
+    }
+
+    .bg-video{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      z-index:0;
+      filter:brightness(.6) saturate(1.05);
+    }
+
+    .overlay{
+      position:fixed;inset:0;z-index:1;pointer-events:none;
+      background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.35));
+    }
+
+    .logo-wrap{
+      position:fixed;left:8vw;top:50%;transform:translateY(-50%);
+      z-index:2;display:flex;align-items:center;gap:.5rem;
+      will-change:transform;
+      animation:floatY 4s ease-in-out infinite;
+    }
+
+    /* LOGO AUMENTADO EM 15% (284px) */
+    .logo-wrap img{
+      width:284px; /* antes: 247px */
+      height:auto;
+      display:block;
+      filter:drop-shadow(0 6px 18px rgba(0,0,0,.5));
+    }
+
+    @keyframes floatY{
+      0%{transform:translateY(-50%) translateY(-6px)}
+      50%{transform:translateY(-50%) translateY(6px)}
+      100%{transform:translateY(-50%) translateY(-6px)}
+    }
+
+    .right-cta{
+      position:fixed;right:4vw;top:50%;transform:translateY(-50%);
+      z-index:2;display:flex;align-items:center;gap:1rem;flex-direction:column;
+      text-align:right;pointer-events:auto;
+    }
+
+    .cta-link{
+      font-weight:700;font-size:clamp(18px,3.2vw,36px);letter-spacing:1px;
+      text-decoration:none;color:#fff;display:inline-block;
+      transform-origin:right center;
+    }
+
+    /* ANIMAÇÃO PADRÃO: BOUNCE LOOP (SALTANDO) */
+    .cta-link span{
+      display:inline-block;
+      animation:bounceLoop 1.2s cubic-bezier(.6,.1,.4,1.5) infinite;
+    }
+    
+    @keyframes bounceLoop{
+      0%, 100%{transform:translateY(0);opacity:1}
+      25%{transform:translateY(-8px);opacity:1}
+      50%{transform:translateY(0);opacity:1}
+    }
+    
+    /* NOVA ANIMAÇÃO DE HOVER: ZOOM IN */
+    @keyframes zoomIn{
+      0%{transform:scale(1)}
+      50%{transform:scale(1.05)}
+      100%{transform:scale(1)}
+    }
+
+    /* REMOVIDA ANIMAÇÃO DE HOVER NO JS E APLICADA AQUI PARA MELHOR DESEMPENHO */
+    .cta-link:hover span, .cta-link:focus span{
+        animation: zoomIn 0.5s ease forwards;
+        opacity: 1 !important; /* Garante que a opacidade não suma no hover */
+    }
+
+    .cta-link:hover{
+      filter:drop-shadow(0 6px 18px rgba(255,255,255,0.12)) saturate(1.1);
+    }
+
+    .center-content{
+      position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+      z-index:2;text-align:center;pointer-events:none;
+    }
+
+    /* LOGO AUMENTADO EM 15% (138px) NO MOBILE */
+    @media (max-width:700px){
+      .logo-wrap img{width:138px;} /* antes: 120px */
+      .right-cta{right:3vw}
+    }
+  </style>
+</head>
+<body>
+
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="https://cdn.pixabay.com/video/2024/11/12/240994_large.mp4" type="video/mp4">
+  </video>
+
+  <div class="overlay" aria-hidden="true"></div>
+
+  <div class="logo-wrap" aria-hidden="false">
+    <img src="https://xatimg.com/image/TEJbTMbLEdHW.png" alt="Logo WRS">
+  </div>
+
+  <div class="right-cta" aria-hidden="false">
+    <a class="cta-link" id="animated-link" href="https://xat.com/R_B_O" target="_blank" rel="noopener noreferrer" aria-label="Visitar xat.com/R_B_O"></a>
+  </div>
+
+  <div class="center-content" style="pointer-events:none;"></div>
+
+  <script>
+    (function(){
+      const raw = 'xat.com/R_B_O';
+      const container = document.getElementById('animated-link');
+      container.innerHTML = '';
+      for (let i = 0; i < raw.length; i++){
+        const ch = raw[i];
+        const span = document.createElement('span');
+        span.textContent = ch;
+        // Aplicando um pequeno delay para criar o efeito cascata no bounce loop
+        span.style.animationDelay = (i * 80) + 'ms';
+        container.appendChild(span);
+      }
+      
+      // Removida a lógica de animação de mouseenter/mouseleave do JS
+      // e transferida para o CSS para melhor performance (usando :hover)
+
+      container.addEventListener('focus', () => {
+        const spans = container.querySelectorAll('span');
+        spans.forEach((s, idx) => {
+          s.style.animation = 'zoomIn 0.5s ease forwards';
+          s.style.animationDelay = (idx * 40) + 'ms';
+        });
+      });
+    })();
+
+    window.addEventListener('touchmove', function(e){ e.preventDefault(); }, {passive:false});
+  </script>
+</body>
+</html>
