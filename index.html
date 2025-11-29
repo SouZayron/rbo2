@@ -36,9 +36,9 @@
       animation:floatY 4s ease-in-out infinite;
     }
 
-    /* LOGO AUMENTADO EM 15% (284px) */
+    /* LOGO NOVO AUMENTO +15% (327px) */
     .logo-wrap img{
-      width:284px; /* antes: 247px */
+      width:327px; /* antes: 284px */
       height:auto;
       display:block;
       filter:drop-shadow(0 6px 18px rgba(0,0,0,.5));
@@ -81,10 +81,9 @@
       100%{transform:scale(1)}
     }
 
-    /* REMOVIDA ANIMAÇÃO DE HOVER NO JS E APLICADA AQUI PARA MELHOR DESEMPENHO */
     .cta-link:hover span, .cta-link:focus span{
         animation: zoomIn 0.5s ease forwards;
-        opacity: 1 !important; /* Garante que a opacidade não suma no hover */
+        opacity: 1 !important; 
     }
 
     .cta-link:hover{
@@ -96,9 +95,9 @@
       z-index:2;text-align:center;pointer-events:none;
     }
 
-    /* LOGO AUMENTADO EM 15% (138px) NO MOBILE */
+    /* LOGO NOVO AUMENTO +15% (159px) NO MOBILE */
     @media (max-width:700px){
-      .logo-wrap img{width:138px;} /* antes: 120px */
+      .logo-wrap img{width:159px;} /* antes: 138px */
       .right-cta{right:3vw}
     }
   </style>
@@ -130,13 +129,9 @@
         const ch = raw[i];
         const span = document.createElement('span');
         span.textContent = ch;
-        // Aplicando um pequeno delay para criar o efeito cascata no bounce loop
         span.style.animationDelay = (i * 80) + 'ms';
         container.appendChild(span);
       }
-      
-      // Removida a lógica de animação de mouseenter/mouseleave do JS
-      // e transferida para o CSS para melhor performance (usando :hover)
 
       container.addEventListener('focus', () => {
         const spans = container.querySelectorAll('span');
